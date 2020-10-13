@@ -3,6 +3,8 @@
 #include <string>
 #include "read_data.h"
 #include <core/model.h>
+#include <iostream>
+#include <ostream>
 
 namespace naivebayes {
 
@@ -11,9 +13,10 @@ class Main {
  public:
 
   void TrainModel();
-  void WriteToFile();
 
  private:
+
+  void WriteToFile(std::vector<std::vector<std::vector<double>>> features);
 
   Parser parser_;
 
