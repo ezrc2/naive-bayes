@@ -1,6 +1,6 @@
 #include <core/model.h>
 
-Classifier::Classifier(std::multimap<size_t, Image> &pairs, size_t image_size) {
+Model::Model(std::multimap<size_t, Image> &pairs, size_t image_size) {
   // set all to 0
   for (size_t i = 0; i < kNumberOfClasses; i++) {
     images_per_class_.push_back(0);
@@ -27,7 +27,7 @@ Classifier::Classifier(std::multimap<size_t, Image> &pairs, size_t image_size) {
   image_label_pairs_ = pairs;
 }
 
-void Classifier::CalculateClassProbabilities() {
+void Model::CalculateClassProbabilities() {
   total_training_images_ = 0;
   for (size_t num_images : images_per_class_) {
     total_training_images_ += num_images;
@@ -41,7 +41,7 @@ void Classifier::CalculateClassProbabilities() {
   }
 }
 
-void Classifier::CalculateFeatureProbabilities() {
+void Model::CalculateFeatureProbabilities() {
   for (auto &pair : image_label_pairs_) {
     int class_value = pair.first;
     std::vector<std::vector<char>> pixels = pair.second.GetPixels();
@@ -59,15 +59,23 @@ void Classifier::CalculateFeatureProbabilities() {
   ApplyLaplaceSmoothing();
 }
 
-void Classifier::ApplyLaplaceSmoothing() {
-
+void Model::ApplyLaplaceSmoothing() {
+  for (size_t class_value = 0; class_value < kNumberOfClasses; class_value++) {
+    for (size_t row = 0; row < image_size_; row++) {
+      for (size_t col = 0; col < image_size_; col++) {
+        feature_probabilities_[class_value][row][col] =
+            (kLapLaceSmoothing + images_per_class_[class_value] + 0.0) /
+            (kNumberOfClasses * kLapLaceSmoothing + total_training_images_);
+      }
+    }
+  }
 }
 
-std::vector<double> Classifier::GetClassProbabilities() {
+std::vector<double> Model::GetClassProbabilities() {
   return class_probabilities_;
 }
 
 std::vector<std::vector<std::vector<double>>>
-Classifier::GetFeatureProbabilities() {
+Model::GetFeatureProbabilities() {
   return feature_probabilities_;
 }

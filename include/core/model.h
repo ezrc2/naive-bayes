@@ -5,10 +5,10 @@
 
 #include "image.h"
 
-class Classifier {
+class Model {
  public:
 
-  Classifier(std::multimap<size_t, Image> &pairs, size_t image_size);
+  Model(std::multimap<size_t, Image> &pairs, size_t image_size);
 
   void CalculateClassProbabilities();
   void CalculateFeatureProbabilities();
