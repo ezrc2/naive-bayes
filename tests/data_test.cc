@@ -1,6 +1,6 @@
-#include <catch2/catch.hpp>
+#include <core/naive_bayes_main.h>
 
-#include <core/rename_this_file.h>
+#include <catch2/catch.hpp>
 
 TEST_CASE("Check that 126 is the best class") {
   REQUIRE(naivebayes::Placeholder().GetBestClass() == "CS 126");
