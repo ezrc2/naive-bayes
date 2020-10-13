@@ -11,5 +11,7 @@ class Image {
  public:
 
   friend std::istream &operator>>(std::istream &input, Image &image);
+  std::vector<std::vector<char>> GetPixels();
+  size_t GetImageSize();
 
 };
