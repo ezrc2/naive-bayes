@@ -1,6 +1,5 @@
 #include <core/read_data.h>
 
-
 std::vector<size_t> Parser::GetLabelsFromFile() {
   std::string path;
   std::cout << "Enter file path of training labels" << std::endl;
@@ -24,4 +23,26 @@ std::vector<size_t> Parser::GetLabelsFromFile() {
   return training_labels;
 }
 
+std::vector<Image> Parser::GetImagesFromFile() {
+  std::string path;
+  std::cout << "Enter file path of training images" << std::endl;
+  std::getline(std::cin, path);
 
+  std::ifstream file_reader(path);
+  //check if file doesn't exist;
+  while (!file_reader) {
+    std::cout << "File doesn't exist." << std::endl;
+    std::cout << "Enter file path of training images" << std::endl;
+    std::getline(std::cin, path);
+    file_reader.open(path);
+  }
+
+  std::vector<Image> training_images;
+  while (!file_reader.eof()) {
+    Image image;
+    file_reader >> image;
+    training_images.push_back(image);
+  }
+
+  return std::vector<Image>();
+}
