@@ -22,7 +22,3 @@ std::istream& operator>>(std::istream& input, Image& image) {
 std::vector<std::vector<char>> Image::GetPixels() {
   return pixels;
 }
-
-size_t Image::GetImageSize() {
-  return pixels.size();
-}
