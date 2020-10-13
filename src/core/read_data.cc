@@ -49,6 +49,10 @@ std::vector<Image> Parser::GetImagesFromFile() {
     file_reader.open(path);
   }
 
+  std::string line;
+  std::getline(file_reader, line);
+  kImageSize = line.length();
+
   std::vector<Image> training_images;
   while (!file_reader.eof()) {
     Image image;
@@ -57,4 +61,7 @@ std::vector<Image> Parser::GetImagesFromFile() {
   }
 
   return std::vector<Image>();
+}
+size_t Parser::GetImageSize() {
+  return kImageSize;
 }
