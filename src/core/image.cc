@@ -7,8 +7,8 @@ std::istream& operator>>(std::istream& input, Image& image) {
 
   for (size_t row = 0; row < image_size; row++) {
     std::vector<char> row_pixels;
-
     row_pixels.reserve(image_size);
+
     for (size_t col = 0; col < image_size; col++) {
       row_pixels.push_back(line[col]);
     }
