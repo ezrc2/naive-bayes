@@ -67,8 +67,7 @@ std::multimap<size_t, Image> Parser::GetLabelImagePairs() {
   std::multimap<size_t, Image> pairs;
   // Insert label-image pairs into multimap
   for (size_t i = 0; i < training_images_.size(); i++) {
-    pairs.insert(
-        std::pair<size_t, Image>(training_labels_[i], training_images_[i]));
+    pairs.insert(std::make_pair(training_labels_[i], training_images_[i]));
   }
 
   return pairs;
