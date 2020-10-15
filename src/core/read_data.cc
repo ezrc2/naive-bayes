@@ -47,7 +47,8 @@ void Parser::GetImagesFromFile() {
   file_reader.clear();
   file_reader.open(path);
 
-  while (!file_reader.eof()) {
+  size_t i = 0;
+  while (i++ < training_labels_.size()) {
     Image image;
     image.SetImageSize(image_size_);
     file_reader >> image;
