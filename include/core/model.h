@@ -28,7 +28,14 @@ class Model {
    */
   void CalculateFeatureProbabilities();
 
+  /**
+   * @return The vector of class probabilities
+   */
   std::vector<double> GetClassProbabilities();
+
+  /**
+   * @return The vector containing feature probabilities for each class
+   */
   std::vector<std::vector<std::vector<double>>> GetFeatureProbabilities();
 
  private:
@@ -37,14 +44,14 @@ class Model {
    */
   void ApplyLaplaceSmoothing();
 
-  std::multimap<size_t, Image> image_label_pairs_;
+  std::multimap<size_t, Image> pairs_;
   std::vector<size_t> images_per_class_;
   std::vector<double> class_probabilities_;
-  std::vector<std::vector<std::vector<double>>>
-      feature_probabilities_;  // shaded pixels
+  // shaded pixels
+  std::vector<std::vector<std::vector<double>>>feature_probabilities_;
 
   size_t image_size_;
-  size_t total_training_images_;
+  size_t sum_images_;
   const size_t kLapLaceSmoothing = 1;
   const size_t kNumberOfClasses = 10;
   const char kGreyPixel = '+';
