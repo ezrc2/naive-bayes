@@ -8,6 +8,9 @@ std::istream& operator>>(std::istream& input, Image& image) {
     if (line.length() == image.image_size_) {
       image.pixels_.push_back(line);
     }
+    else {
+      break;
+    }
 
   }
   return input;
