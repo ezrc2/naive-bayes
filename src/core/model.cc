@@ -67,13 +67,10 @@ void Model::ApplyLaplaceSmoothing() {
   for (size_t class_value = 0; class_value < kNumberOfClasses; class_value++) {
     for (size_t row = 0; row < image_size_; row++) {
       for (size_t col = 0; col < image_size_; col++) {
-
         feature_probabilities_[class_value][row][col] =
             (kLapLaceSmoothing + feature_probabilities_[class_value][row][col] +
              0.0) /
-            (kNumberOfClasses * kLapLaceSmoothing +
-             images_per_class_[class_value] + 0.0);
-
+            (2 * kLapLaceSmoothing + images_per_class_[class_value] + 0.0);
       }
     }
   }
