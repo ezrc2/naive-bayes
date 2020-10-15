@@ -15,7 +15,7 @@ namespace naivebayes {
  * file
  */
 
-class Main {
+class Driver {
  public:
   /**
    * Takes in the file paths of the training labels and images and calls the

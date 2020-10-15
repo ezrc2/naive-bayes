@@ -1,8 +1,8 @@
-#include <core/naive_bayes_main.h>
+#include <core/driver.h>
 
 namespace naivebayes {
 
-void Main::TrainModel() {
+void Driver::TrainModel() {
   Parser parser;
   std::multimap<size_t, Image> pairs(parser.GetLabelImagePairs());
   size_t image_size = parser.GetImageSize();
@@ -37,7 +37,7 @@ void Main::TrainModel() {
   file_reader.close();
 }
 
-void Main::WriteToFile(std::string &path,
+void Driver::WriteToFile(std::string &path,
                        const std::vector<double> &class_probabilities,
                        const std::vector<std::vector<std::vector<double>>>
                            &feature_probabilities) {

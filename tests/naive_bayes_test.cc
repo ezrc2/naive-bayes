@@ -1,18 +1,20 @@
 #pragma once
-#include <core/naive_bayes_main.h>
+#include <core/driver.h>
 
 #include <catch2/catch.hpp>
 #include <ostream>
 
 Parser parser;
+std::multimap<size_t, Image> pairs;
+size_t image_size;
 
-std::multimap<size_t, Image> pairs(parser.GetLabelImagePairs());
-size_t image_size = parser.GetImageSize();
-
-Model model(pairs, image_size);
-naivebayes::Main naive_bayes_main;
+void before() {
+  pairs = parser.GetLabelImagePairs();
+  image_size = parser.GetImageSize();
+}
 
 TEST_CASE("Check for correct number of data") {
+  before();
   SECTION("Correct number of labels and images") {
     REQUIRE(pairs.size() == 5000);
   }
@@ -22,33 +24,34 @@ TEST_CASE("Check for correct number of data") {
 }
 
 TEST_CASE("Test labels and images") {
+  before();
+  Model model(pairs, image_size);
+  naivebayes::Driver driver;
+
   model.CalculateClassProbabilities();
   model.CalculateFeatureProbabilities();
 
-  naive_bayes_main.TrainModel();
+  driver.TrainModel();
   SECTION("Test class probabilities") {
-    std::vector<double> expected = {0.0947631, 0.110973,  0.0992519, 0.098005,
-                                    0.107481,  0.0875312, 0.101247,  0.108229,
-                                    0.0932668, 0.0992519};
+    std::vector<double> expected = {0.0958084, 0.112575,  0.0976048, 0.0986028,
+                                    0.106986,  0.0868263, 0.1002,    0.10998,
+                                    0.0924152, 0.099002};
     std::vector<double> calculated(model.GetClassProbabilities());
     REQUIRE_THAT(calculated, Catch::Approx(expected).epsilon(1.e-5));
   }
   SECTION("Test feature probabilities") {
     std::vector<std::vector<std::vector<double>>> feature_probabilities(
         model.GetFeatureProbabilities());
-    REQUIRE(feature_probabilities[0][0][0] == Approx(0.0527421));
-    REQUIRE(feature_probabilities[0][0][0] == Approx(0.0313684));
-    REQUIRE(feature_probabilities[0][0][0] == Approx(0.0760837));
+    REQUIRE(feature_probabilities[0][0][0] == Approx(0.002079));
+    REQUIRE(feature_probabilities[0][14][14] == Approx(0.029106));
+    REQUIRE(feature_probabilities[0][22][26] == Approx(0.004158));
   }
 }
 
 TEST_CASE("Test output file") {
-  std::string output_path = "data/test_model_probabilities";
+  std::string output_path = "data/testing/test_trained_model";
   std::ifstream file_reader(output_path);
 
-  SECTION("File isn't empty") {
-    REQUIRE(file_reader.peek() == std::ifstream::traits_type::eof() == false);
-  }
   SECTION("Test values") {
     std::string line;
     std::getline(file_reader, line);
@@ -58,13 +61,22 @@ TEST_CASE("Test output file") {
   }
 }
 
-TEST_CASE("Test GetPixels") {
-  std::vector<std::vector<char>> pixels = pairs.find(5)->second.GetPixels();
+TEST_CASE("Test GetPixels size") {
+  std::vector<std::string> pixels = pairs.find(5)->second.GetPixels();
   REQUIRE(pixels.size() == 28);
   REQUIRE(pixels[0].size() == 28);
 }
 
-TEST_CASE("3x3 images from prairielearn") {
+TEST_CASE("3x3 images 0 and 1") {
+  before();
+  Model model(pairs, image_size);
+  naivebayes::Driver driver;
+
+  model.CalculateClassProbabilities();
+  model.CalculateFeatureProbabilities();
+
+  driver.TrainModel();
+
   SECTION("Class probabilities") {
     std::vector<double> expected = {0.4, 0.6};
     std::vector<double> calculated(model.GetClassProbabilities());
@@ -72,9 +84,9 @@ TEST_CASE("3x3 images from prairielearn") {
   }
   SECTION("Shaded Probabilities for class = 0") {
     std::vector<std::vector<double>> expected = {
-        {0.666666, 0.666666, 0.666666},
-        {0.666666, 0.333333, 0.666666},
-        {0.666666, 0.666666, 0.666666}};
+        {0.666667, 0.666667, 0.666667},
+        {0.666667, 0.333333, 0.666667},
+        {0.666667, 0.666667, 0.666667}};
 
     std::vector<std::vector<std::vector<double>>> calculated(
         model.GetFeatureProbabilities());

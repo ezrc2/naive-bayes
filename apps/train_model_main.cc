@@ -1,7 +1,7 @@
-#include <core/naive_bayes_main.h>
+#include <core/driver.h>
 
 int main() {
-  naivebayes::Main main;
-  main.TrainModel();
+  naivebayes::Driver driver;
+  driver.TrainModel();
   return 0;
 }
