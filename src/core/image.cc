@@ -4,9 +4,11 @@ std::istream& operator>>(std::istream& input, Image& image) {
   for (size_t row = 0; row < image.image_size_; row++) {
     std::string line;
     std::getline(input, line);
-    if (line.size() == image.image_size_) {
+
+    if (line.length() == image.image_size_) {
       image.pixels_.push_back(line);
     }
+
   }
   return input;
 }
