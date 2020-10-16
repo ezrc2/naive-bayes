@@ -4,10 +4,10 @@ namespace naivebayes {
 
 void Driver::TrainModel() {
   Parser parser;
-  std::multimap<size_t, Image> pairs(parser.GetLabelImagePairs());
+  std::map<size_t, std::vector<Image>> training_data = parser.GetLabelImagePairs();
   size_t image_size = parser.GetImageSize();
 
-  Model model(pairs, image_size);
+  Model model(training_data, image_size);
 
   std::string path;
   std::cout << "Enter file path of file to save trained model: " << std::endl;

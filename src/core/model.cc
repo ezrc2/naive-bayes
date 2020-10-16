@@ -1,14 +1,10 @@
 #include <core/model.h>
 
-Model::Model(const std::multimap<size_t, Image> &pairs, size_t image_size) {
-  // set all to 0
-  for (size_t i = 0; i < kNumberOfClasses; i++) {
-    images_per_class_.push_back(0);
-  }
-
+Model::Model(const std::map<size_t, std::vector<Image>> &training_data,
+             size_t image_size) {
   // Count number of images for each class
-  for (const auto &pair : pairs) {
-    images_per_class_[pair.first]++;
+  for (const auto &data_pair : training_data) {
+    images_per_class_.push_back(data_pair.second.size());
   }
 
   // Set starting counts at all coordinates to 0.0
@@ -28,11 +24,10 @@ Model::Model(const std::multimap<size_t, Image> &pairs, size_t image_size) {
   }
 
   image_size_ = image_size;
-  pairs_ = pairs;
+  training_data_ = training_data;
 }
 
 void Model::CalculateClassProbabilities() {
-  // Sum the total number of training images
   sum_images_ = 0;
   for (size_t num_images : images_per_class_) {
     sum_images_ += num_images;
@@ -47,15 +42,16 @@ void Model::CalculateClassProbabilities() {
 }
 
 void Model::CalculateFeatureProbabilities() {
-  for (auto &pair : pairs_) {
-    std::vector<std::string> pixels = pair.second.GetPixels();
-
-    for (size_t row = 0; row < pixels.size(); row++) {
-      for (size_t col = 0; col < pixels.size(); col++) {
-        char pixel = pixels[row][col];
-        // Increment count at pixel (row, col) for this class if pixel is shaded
-        if (pixel == kGreyPixel || pixel == kBlackPixel) {
-          feature_probabilities_[pair.first][row][col]++;
+  for (auto &data_pair : training_data_) {
+    for (Image image : data_pair.second) {
+      std::vector<std::string> pixels = image.GetPixels();
+      for (size_t row = 0; row < pixels.size(); row++) {
+        for (size_t col = 0; col < pixels.size(); col++) {
+          char pixel = pixels[row][col];
+          // Increment count at pixel (row, col) for this class if pixel is shaded
+          if (pixel == kGreyPixel || pixel == kBlackPixel) {
+            feature_probabilities_[data_pair.first][row][col]++;
+          }
         }
       }
     }
@@ -68,8 +64,8 @@ void Model::ApplyLaplaceSmoothing() {
     for (size_t row = 0; row < image_size_; row++) {
       for (size_t col = 0; col < image_size_; col++) {
         feature_probabilities_[class_value][row][col] =
-            (kLapLaceSmoothing + feature_probabilities_[class_value][row][col] +
-             0.0) /
+            (kLapLaceSmoothing +
+             feature_probabilities_[class_value][row][col]) /
             (2 * kLapLaceSmoothing + images_per_class_[class_value] + 0.0);
       }
     }

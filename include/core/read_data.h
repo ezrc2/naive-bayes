@@ -19,7 +19,7 @@ class Parser {
    * Places the label-image pairs into a multimap
    * @return
    */
-  std::multimap<size_t, Image> GetLabelImagePairs();
+  std::map<size_t, std::vector<Image>> GetLabelImagePairs();
   size_t GetImageSize();
 
  private:

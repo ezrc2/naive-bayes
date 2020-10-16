@@ -58,17 +58,25 @@ void Parser::GetImagesFromFile() {
   file_reader.close();
 }
 
-std::multimap<size_t, Image> Parser::GetLabelImagePairs() {
+std::map<size_t, std::vector<Image>> Parser::GetLabelImagePairs() {
   GetLabelsFromFile();
   GetImagesFromFile();
 
-  std::multimap<size_t, Image> pairs;
-  // Insert label-image pairs into multimap
-  for (size_t i = 0; i < training_images_.size(); i++) {
-    pairs.insert(std::make_pair(training_labels_[i], training_images_[i]));
+  std::map<size_t, std::vector<Image>> training_data;
+
+  for (size_t i = 0; i < training_labels_.size(); i++) {\
+    size_t label = training_labels_[i];
+    if (training_data.count(label) == 0) {
+      std::vector<Image> images;
+      images.push_back(training_images_[i]);
+      training_data.insert(std::make_pair(label, images));
+    }
+    else {
+      training_data.find(label)->second.push_back(training_images_[i]);;
+    }
   }
 
-  return pairs;
+  return training_data;
 }
 
 size_t Parser::GetImageSize() {

@@ -16,7 +16,7 @@ class Model {
    * @param pairs The multimap with label-image pairs
    * @param image_size The size of each image
    */
-  Model(const std::multimap<size_t, Image> &pairs, size_t image_size);
+  Model(const std::map<size_t, std::vector<Image>> &training_data, size_t image_size);
 
   /**
    * Calculates the class probabilities
@@ -44,11 +44,10 @@ class Model {
    */
   void ApplyLaplaceSmoothing();
 
-  std::multimap<size_t, Image> pairs_;
+  std::map<size_t, std::vector<Image>> training_data_;
   std::vector<size_t> images_per_class_;
   std::vector<double> class_probabilities_;
-  // shaded pixels
-  std::vector<std::vector<std::vector<double>>>feature_probabilities_;
+  std::vector<std::vector<std::vector<double>>> feature_probabilities_;
 
   size_t image_size_;
   size_t sum_images_;
