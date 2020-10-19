@@ -10,9 +10,6 @@
  */
 class Image {
 
-  std::vector<std::string> pixels_;
-  size_t image_size_;
-
  public:
 
   /**
@@ -24,11 +21,12 @@ class Image {
    */
   friend std::istream &operator>>(std::istream &input, Image &image);
 
-  void SetImageSize(size_t size);
-
   /**
    * @return The 2D vector of Pixels
    */
-  std::vector<std::string> GetPixels();
+  std::vector<std::vector<char>> GetPixels();
+
+ private:
+  std::vector<std::vector<char>> pixels_;
 
 };

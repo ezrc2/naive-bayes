@@ -1,25 +1,27 @@
 #include "core/image.h"
 
 std::istream& operator>>(std::istream& input, Image& image) {
-  for (size_t row = 0; row < image.image_size_; row++) {
-    std::string line;
-    std::getline(input, line);
+  std::string line;
+  std::getline(input, line);
+  size_t image_size = line.length();
 
-    if (line.length() == image.image_size_) {
-      image.pixels_.push_back(line);
+  for (size_t row = 0; row < image_size - 1; row++) {
+    if (line.length() == image_size) {
+      std::vector<char> row_pixels;
+      for (char c : line) {
+        row_pixels.push_back(c);
+      }
+      image.pixels_.push_back(row_pixels);
     }
     else {
       break;
     }
 
+    std::getline(input, line);
   }
   return input;
 }
 
-void Image::SetImageSize(size_t size) {
-  image_size_ = size;
-}
-
-std::vector<std::string> Image::GetPixels() {
+std::vector<std::vector<char>> Image::GetPixels() {
   return pixels_;
 }
