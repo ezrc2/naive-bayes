@@ -50,7 +50,7 @@ void Driver::LoadModel(const std::string &saved_path) {
     size_t class_value = std::stoi(line);
     std::vector<std::vector<double>> features;
     while (!line.empty()) {
-      std::vector<std::string> tokens;
+      std::vector<std::string> tokens = SplitString(line, kSpace);
       std::vector<double> row;
       for (size_t i = 0; i < tokens.size(); i++) {
         row.push_back(std::stod(tokens[i]));
@@ -98,6 +98,15 @@ void Driver::WriteToFile(
   file_writer.close();
 }
 
-
+std::vector<std::string> Driver::SplitString(std::string string,
+                                             char delimiter) {
+  size_t position = 0;
+  std::vector<std::string> token;
+  while ((position = string.find(delimiter)) != std::string::npos) {
+    token.push_back(string.substr(0, position));
+    string.erase(0, position + 1);
+  }
+  return token;
+}
 
 }  // namespace naivebayes
