@@ -32,7 +32,7 @@ class Model {
   /**
    * @return The vector of class probabilities
    */
-  std::vector<double> GetPriorProbabilities();
+  std::map<size_t, double> GetPriorProbabilities();
 
   /**
    * @return The vector containing feature probabilities for each class
@@ -46,8 +46,8 @@ class Model {
   void ApplyLaplaceSmoothing(size_t class_value);
 
   std::map<size_t, std::vector<Image>> training_data_;
-  std::vector<size_t> images_per_class_;
-  std::vector<double> prior_probabilities_;
+  std::map<size_t, size_t> images_per_class_;
+  std::map<size_t, double> prior_probabilities_;
   std::map<size_t, std::vector<std::vector<double>>> feature_probabilities_;
 
   size_t sum_images_;
