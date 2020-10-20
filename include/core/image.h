@@ -9,9 +9,7 @@
  * operator
  */
 class Image {
-
  public:
-
   /**
    * Overloads the >> operator to read the whole image
    *
@@ -19,7 +17,7 @@ class Image {
    * @param image The Image object
    * @return The input stream
    */
-  friend std::istream &operator>>(std::istream &input, Image &image);
+  friend std::istream& operator>>(std::istream& input, Image& image);
 
   /**
    * @return The 2D vector of Pixels
@@ -28,5 +26,4 @@ class Image {
 
  private:
   std::vector<std::vector<char>> pixels_;
-
 };

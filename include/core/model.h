@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "image.h"
+#include "feature_data.h"
 
 /**
  * Calculates the class and feature probabilities given the training labels and
@@ -16,7 +17,7 @@ class Model {
    * @param pairs The training data map with label-vector<image> pairs
    * @param image_size The size of each image
    */
-  Model(const std::map<size_t, std::vector<Image>> &training_data,
+  Model(const std::map<size_t, std::vector<Image>>& training_data,
         size_t image_size);
 
   /**
@@ -37,14 +38,14 @@ class Model {
   /**
    * @return The map containing feature probabilities for each class
    */
-  std::map<size_t, std::vector<std::vector<double>>> GetFeatureProbabilities();
+  std::map<size_t, FeatureData> GetFeatureProbabilities();
 
  private:
-
   std::map<size_t, std::vector<Image>> training_data_;
   std::map<size_t, size_t> images_per_class_;
   std::map<size_t, double> prior_probabilities_;
-  std::map<size_t, std::vector<std::vector<double>>> feature_probabilities_;
+  //std::map<size_t, std::vector<std::vector<double>>> feature_probabilities_;
+  std::map<size_t, FeatureData> feature_probabilities_;
 
   size_t sum_images_;
   const double kLapLaceSmoothing = 1;
