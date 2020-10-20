@@ -14,9 +14,10 @@ int main(int argc, char* argv[]) {
       driver.TrainModel(argv[3], argv[4], argv[6], true);
     }
   }
+
   // Load and test model
   if (action == "load" && argc == 4) {
-    driver.LoadModel(argv[3]);
+    driver.LoadModel(argv[3], true);
   }
 
   return 0;

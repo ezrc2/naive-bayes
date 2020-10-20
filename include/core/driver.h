@@ -1,15 +1,15 @@
 #pragma once
 
-#include <core/classifier.h>
-#include <core/model.h>
-
 #include <iostream>
 #include <iterator>
 #include <ostream>
 #include <sstream>
 #include <string>
 
-#include "read_data.h"
+#include "classifier.h"
+#include "feature_data.h"
+#include "file_parser.h"
+#include "model.h"
 
 namespace naivebayes {
 
@@ -28,20 +28,28 @@ class Driver {
    * @param images_path
    * @param saved_path
    */
-  void TrainModel(const std::string &labels_path,
-                  const std::string &images_path, const std::string &saved_path,
+  void TrainModel(const std::string& labels_path,
+                  const std::string& images_path, const std::string& saved_path,
                   bool test);
 
   /**
    * Loads in a trained model
    * @param saved_path The file path of the model
    */
-  void LoadModel(const std::string &saved_path);
+  void LoadModel(const std::string& saved_path, bool validate_model);
 
   /**
-   * Calls on the classifier methods
+   * Calls on the classifier methods to verify the classifier
    */
-  void Classify();
+  void VerifyClassifier();
+
+  /**
+   * Classifies a single image
+   *
+   * @param pixels The 2D char vector of the image
+   * @return The predicted class of the image
+   */
+  size_t ClassifySingleImage(const std::vector<std::vector<char>>& pixels);
 
  private:
   /**
@@ -52,10 +60,9 @@ class Driver {
    * @param prior_probabilities The vector of class probabilities
    * @param feature_probabilities The 3D vector of feature probabilities
    */
-  void WriteToFile(const std::string &saved_path,
-                   const std::map<size_t, double> &prior_probabilities,
-                   const std::map<size_t, std::vector<std::vector<double>>>
-                       &feature_probabilities);
+  void WriteToFile(const std::string& saved_path,
+                   const std::map<size_t, double>& prior_probabilities,
+                   const std::map<size_t, FeatureData>& feature_probabilities);
 
   /**
    * Splits a string by space
@@ -63,10 +70,10 @@ class Driver {
    * @param string The input string
    * @return A vector of string tokens
    */
-  std::vector<std::string> SplitString(const std::string &to_split);
+  std::vector<std::string> SplitString(const std::string& to_split);
 
   std::map<size_t, double> prior_probabilities_;
-  std::map<size_t, std::vector<std::vector<double>>> feature_probabilities_;
+  std::map<size_t, FeatureData> feature_probabilities_;
 
   const char kSpace = ' ';
 };
