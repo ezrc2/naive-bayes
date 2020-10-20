@@ -6,12 +6,12 @@ Model::Model(const std::map<size_t, std::vector<Image>> &training_data,
     images_per_class_.insert(
         std::make_pair(label_image.first, label_image.second.size()));
 
-    // Set starting counts at all coordinates to 0.0
     std::vector<std::vector<double>> features;
     for (size_t row = 0; row < image_size; row++) {
-      std::vector<double> rows(image_size, 0.0);
+      std::vector<double> rows(image_size, 0);
       features.push_back(rows);
     }
+
     feature_probabilities_.insert(std::make_pair(label_image.first, features));
   }
 
@@ -31,6 +31,7 @@ void Model::CalculatePriorProbabilities() {
         (kLapLaceSmoothing + class_value.second) /
         (kNumberOfClasses * kLapLaceSmoothing + sum_images_));
   }
+
   size_t index = 0;
   for (const auto &label_image : training_data_) {
     prior_probabilities_.insert(
@@ -43,16 +44,17 @@ void Model::CalculateFeatureProbabilities() {
     size_t class_value = label_image.first;
     size_t image_size =
         training_data_.at(class_value)[class_value].GetPixels().size();
-    std::cout << class_value << " -- " << image_size << std::endl;
 
     for (size_t row = 0; row < image_size; row++) {
       for (size_t col = 0; col < image_size; col++) {
         for (Image image : label_image.second) {
+
           char pixel = image.GetPixels()[row][col];
           // Increment count at pixel (row, col) if pixel is shaded
           if (pixel == kGreyPixel || pixel == kBlackPixel) {
             feature_probabilities_.at(class_value)[row][col]++;
           }
+
         }
         // Laplace smoothing
         feature_probabilities_.at(class_value)[row][col] =
