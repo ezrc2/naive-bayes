@@ -32,36 +32,34 @@ void Driver::TrainModel(const std::string &labels_path,
 void Driver::LoadModel(const std::string &saved_path) {
   std::ifstream file_reader(saved_path);
 
-  prior_probabilities_.clear();
-  feature_probabilities_.clear();
-
   std::string line;
   std::getline(file_reader, line);
 
   while (!line.empty()) {
-    std::vector<std::string> tokens = SplitString(line, kSpace);
-    prior_probabilities_.insert(
-        std::make_pair(std::stoi(tokens[0]), std::stod(tokens[1])));
+    std::vector<std::string> tokens = SplitString(line);
+    std::getline(file_reader, line);
   }
 
-  int j = 0;
-  while (!file_reader.eof()) {
-    std::getline(file_reader, line);
+  while (std::getline(file_reader, line)) {
     size_t class_value = std::stoi(line);
     std::vector<std::vector<double>> features;
+
     while (!line.empty()) {
-      std::vector<std::string> tokens = SplitString(line, kSpace);
+      std::getline(file_reader, line);
+      std::vector<std::string> tokens = SplitString(line);
+
       std::vector<double> row;
       for (size_t i = 0; i < tokens.size(); i++) {
         row.push_back(std::stod(tokens[i]));
       }
+
       features.push_back(row);
     }
     feature_probabilities_.insert(std::make_pair(class_value, features));
-    std::cout << j++ << std::endl;
   }
 
   file_reader.close();
+  Classify();
 }
 
 void Driver::Classify() {
@@ -98,15 +96,15 @@ void Driver::WriteToFile(
   file_writer.close();
 }
 
-std::vector<std::string> Driver::SplitString(std::string string,
-                                             char delimiter) {
-  size_t position = 0;
-  std::vector<std::string> token;
-  while ((position = string.find(delimiter)) != std::string::npos) {
-    token.push_back(string.substr(0, position));
-    string.erase(0, position + 1);
-  }
-  return token;
+std::vector<std::string> Driver::SplitString(const std::string &to_split) {
+  std::vector<std::string> tokens;
+
+  std::stringstream stream(to_split);
+  std::string temp;
+  while (stream >> temp)
+    tokens.push_back(temp);
+
+  return tokens;
 }
 
 }  // namespace naivebayes

@@ -1,13 +1,13 @@
 #pragma once
 
-#include <core/model.h>
 #include <core/classifier.h>
+#include <core/model.h>
 
 #include <iostream>
-#include <ostream>
-#include <string>
-#include <sstream>
 #include <iterator>
+#include <ostream>
+#include <sstream>
+#include <string>
 
 #include "read_data.h"
 
@@ -28,7 +28,9 @@ class Driver {
    * @param images_path
    * @param saved_path
    */
-  void TrainModel(const std::string &labels_path, const std::string &images_path, const std::string &saved_path, bool test);
+  void TrainModel(const std::string &labels_path,
+                  const std::string &images_path, const std::string &saved_path,
+                  bool test);
 
   /**
    * Loads in a trained model
@@ -36,6 +38,9 @@ class Driver {
    */
   void LoadModel(const std::string &saved_path);
 
+  /**
+   * Calls on the classifier methods
+   */
   void Classify();
 
  private:
@@ -44,7 +49,7 @@ class Driver {
    * the file is empty
    *
    * @param path The path of the file
-   * @param class_probabilities The vector of class probabilities
+   * @param prior_probabilities The vector of class probabilities
    * @param feature_probabilities The 3D vector of feature probabilities
    */
   void WriteToFile(const std::string &saved_path,
@@ -53,19 +58,17 @@ class Driver {
                        &feature_probabilities);
 
   /**
-   * Splits a string by a delimiter
+   * Splits a string by space
    *
    * @param string The input string
-   * @param delimiter The delimiter
    * @return A vector of string tokens
    */
-  std::vector<std::string> SplitString(std::string string, char delimiter);
+  std::vector<std::string> SplitString(const std::string &to_split);
 
   std::map<size_t, double> prior_probabilities_;
   std::map<size_t, std::vector<std::vector<double>>> feature_probabilities_;
 
   const char kSpace = ' ';
-
 };
 
 }  // namespace naivebayes
