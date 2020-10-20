@@ -12,7 +12,15 @@ class Classifier {
              const std::map<size_t, std::vector<std::vector<double>>>
                  &feature_probabilities);
 
+  double ValidateModel();
+
+  size_t ClassifyImage(const std::vector<std::vector<char>> &pixels);
+
+  std::map<size_t, double> GetLikelihoods();
+
+
  private:
+  size_t FindHighestProbability(const std::map<size_t, double> &vector);
 
   std::map<size_t, std::vector<Image>> testing_data_;
   std::map<size_t, double> prior_probabilities_;
