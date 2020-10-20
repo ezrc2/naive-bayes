@@ -12,13 +12,12 @@ Classifier::Classifier(const std::map<size_t, double> &prior_probabilities,
 double Classifier::ValidateModel() {
   double correct = 0;
   double total = 0;
+
   for (const auto &label_image : testing_data_) {
     size_t class_value = label_image.first;
     for (Image image : label_image.second) {
       size_t prediction = ClassifyImage(image.GetPixels());
-      if (prediction == class_value) {
-        correct++;
-      }
+      prediction == class_value ? correct++ : correct;
       total++;
     }
   }
@@ -26,6 +25,31 @@ double Classifier::ValidateModel() {
 }
 
 size_t Classifier::ClassifyImage(const std::vector<std::vector<char>> &pixels) {
+  likelihoods_.clear();
+
+  for (const auto &iterator : feature_probabilities_) {
+    std::vector<std::vector<double>> features = iterator.second;
+    double score = 0;
+
+    for (size_t row = 0; row < features.size(); row++) {
+      for (size_t col = 0; col < features[row].size(); col++) {
+        char pixel = pixels[row][col];
+        // Use log to avoid arithmetic underflow
+        if (pixel == kGreyPixel || pixel == kBlackPixel) {
+          score += log(features[row][col]);
+        } else {
+          score += log(1 - features[row][col]);
+        }
+      }
+    }
+
+    likelihoods_.insert(std::make_pair(iterator.first, score));
+  }
+
+  for (const auto &prior : prior_probabilities_) {
+    // Use log to avoid arithmetic underflow
+    likelihoods_[prior.first] += log(prior.second);
+  }
 
   return FindHighestProbability(likelihoods_);
 }
@@ -44,7 +68,6 @@ size_t Classifier::FindHighestProbability(
 
   return highest_class;
 }
-
 
 std::map<size_t, double> Classifier::GetLikelihoods() {
   return likelihoods_;
