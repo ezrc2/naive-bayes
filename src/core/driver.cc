@@ -4,7 +4,7 @@ namespace naivebayes {
 
 void Driver::TrainModel(const std::string& labels_path,
                         const std::string& images_path,
-                        const std::string& saved_path, bool test) {
+                        const std::string& saved_path, bool validate_model) {
   FileParser file_parser;
   std::map<size_t, std::vector<Image>> training_data =
       file_parser.GetLabelImagePairs(labels_path, images_path);
@@ -23,8 +23,8 @@ void Driver::TrainModel(const std::string& labels_path,
 
   input_stream.close();
 
-  if (test) {
-    VerifyClassifier();
+  if (validate_model) {
+    VerifyModel();
   }
 }
 
@@ -56,32 +56,29 @@ void Driver::LoadModel(const std::string& saved_path, bool validate_model) {
 
   input_stream.close();
   if (validate_model) {
-    VerifyClassifier();
+    VerifyModel();
   }
 }
 
-void Driver::VerifyClassifier() {
-  Classifier classifier;
-  classifier.ValidateModel(prior_probabilities_, feature_probabilities_);
+void Driver::VerifyModel() {
+  classifier_.ValidateModel(prior_probabilities_, feature_probabilities_);
 }
 
 size_t Driver::ClassifySingleImage(
     const std::vector<std::vector<char>>& pixels) {
-  Classifier classifier;
-  return classifier.ClassifyImage(pixels, prior_probabilities_,
-                                  feature_probabilities_);
+  return classifier_.ClassifyImage(pixels, prior_probabilities_,
+                                   feature_probabilities_);
 }
 
 void Driver::SaveModel(
     const std::string& saved_path,
     const std::map<size_t, double>& prior_probabilities,
     const std::map<size_t, FeatureData>& feature_probabilities) {
-
   std::ofstream output_stream(saved_path);
 
   for (const auto& label : prior_probabilities) {
-    output_stream << label.first << kSpace << prior_probabilities.at(label.first)
-                << std::endl;
+    output_stream << label.first << kSpace
+                  << prior_probabilities.at(label.first) << std::endl;
   }
   output_stream << std::endl;
 
@@ -104,6 +101,14 @@ std::vector<std::string> Driver::SplitString(const std::string& to_split) {
   }
 
   return tokens;
+}
+
+double Driver::GetModelAccuracy() {
+  return classifier_.GetModelAccuracy();
+}
+
+std::map<size_t, double> Driver::GetLikelihoods() {
+  return classifier_.GetLikelihoods();
 }
 
 }  // namespace naivebayes

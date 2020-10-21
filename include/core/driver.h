@@ -27,11 +27,11 @@ class Driver {
    * @param labels_path The file path of the labels
    * @param images_path The file path of the images
    * @param saved_path The file path to save the model
-   * @param test Validate the model or not
+   * @param validate_model Validate the model or not
    */
   void TrainModel(const std::string& labels_path,
                   const std::string& images_path, const std::string& saved_path,
-                  bool test);
+                  bool validate_model);
 
   /**
    * Loads in a trained model
@@ -42,17 +42,27 @@ class Driver {
   void LoadModel(const std::string& saved_path, bool validate_model);
 
   /**
-   * Calls on the classifier methods to verify the classifier
+   * Calls on the classifier methods to verify the model
    */
-  void VerifyClassifier();
+  void VerifyModel();
 
   /**
-   * Classifies a single image
+   * Classifies a single image (used in the sketchpad)
    *
    * @param pixels The 2D char vector of the image
    * @return The predicted class of the image
    */
   size_t ClassifySingleImage(const std::vector<std::vector<char>>& pixels);
+
+  /**
+   * @return The model's accuracy
+   */
+  double GetModelAccuracy();
+
+  /**
+   * @return
+   */
+  std::map<size_t, double> GetLikelihoods();
 
  private:
   /**
@@ -64,8 +74,8 @@ class Driver {
    * @param feature_probabilities The 3D vector of feature probabilities
    */
   void SaveModel(const std::string& saved_path,
-                   const std::map<size_t, double>& prior_probabilities,
-                   const std::map<size_t, FeatureData>& feature_probabilities);
+                 const std::map<size_t, double>& prior_probabilities,
+                 const std::map<size_t, FeatureData>& feature_probabilities);
 
   /**
    * Splits a string by space
@@ -77,6 +87,7 @@ class Driver {
 
   std::map<size_t, double> prior_probabilities_;
   std::map<size_t, FeatureData> feature_probabilities_;
+  Classifier classifier_;
 
   const char kSpace = ' ';
 };
