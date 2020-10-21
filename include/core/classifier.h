@@ -46,6 +46,11 @@ class Classifier {
    */
   std::map<size_t, double> GetLikelihoods();
 
+  /**
+   * @return The model's accuracy based on the testing data
+   */
+  double GetModelAccuracy();
+
  private:
   /**
    * Finds the highest probability in the likelihoods
@@ -57,6 +62,7 @@ class Classifier {
 
   std::map<size_t, std::vector<Image>> testing_data_;
   std::map<size_t, double> likelihoods_;
+  double accuracy_;
 
   const std::string kLabelsPath = "data/testlabels";
   const std::string kImagesPath = "data/testimages";

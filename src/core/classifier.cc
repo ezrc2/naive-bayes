@@ -21,8 +21,9 @@ double Classifier::ValidateModel(
       total++;
     }
   }
-  std::cout << correct / total << std::endl;
-  return correct / total;
+  accuracy_ = correct / total;
+  std::cout << "accuracy: " << accuracy_ << std::endl;
+  return accuracy_;
 }
 
 size_t Classifier::ClassifyImage(
@@ -34,7 +35,7 @@ size_t Classifier::ClassifyImage(
 
   for (std::pair<size_t, FeatureData> data : feature_probabilities) {
 
-    std::vector<std::vector<double>> features = data.second.GetFeatures();
+    std::vector<std::vector<double>> features = data.second.features_;
     double score = prior_probabilities.at(data.first);
 
     for (size_t row = 0; row < features.size(); row++) {
@@ -71,4 +72,8 @@ size_t Classifier::FindHighestProbability(
 
 std::map<size_t, double> Classifier::GetLikelihoods() {
   return likelihoods_;
+}
+
+double Classifier::GetModelAccuracy() {
+  return accuracy_;
 }
