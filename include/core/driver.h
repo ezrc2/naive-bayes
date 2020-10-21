@@ -14,8 +14,7 @@
 namespace naivebayes {
 
 /**
- * The main method the model is trained and the probabilities are written into a
- * file
+ * Trains, saves, loads, and validates a model
  */
 
 class Driver {
@@ -60,7 +59,12 @@ class Driver {
   double GetModelAccuracy();
 
   /**
-   * @return
+   * @return The priors of the model
+   */
+  std::map<size_t, double> GetPriors();
+
+  /**
+   * @return The likelihoods from the classifier
    */
   std::map<size_t, double> GetLikelihoods();
 

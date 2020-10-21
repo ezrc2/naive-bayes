@@ -107,6 +107,10 @@ double Driver::GetModelAccuracy() {
   return classifier_.GetModelAccuracy();
 }
 
+std::map<size_t, double> Driver::GetPriors() {
+  return prior_probabilities_;
+}
+
 std::map<size_t, double> Driver::GetLikelihoods() {
   return classifier_.GetLikelihoods();
 }
