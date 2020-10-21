@@ -19,7 +19,7 @@ TEST_CASE("Classify images") {
   naivebayes::Driver driver;
   driver.LoadModel(kSubsetModelPath, false);
   // 10 images, 1 image of each digit, should all be correct
-  //REQUIRE(driver.GetModelAccuracy() == 1.0);
+  REQUIRE(driver.GetModelAccuracy() == 1.0);
 }
 
 TEST_CASE("Test Likelihoods") {
@@ -41,4 +41,5 @@ TEST_CASE("Test Likelihoods") {
   for (const auto& iter : likelihoods) {
     REQUIRE(iter.second == Approx(expected[i++]));
   }
+  input_stream.close();
 }
