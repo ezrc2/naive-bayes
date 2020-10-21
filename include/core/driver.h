@@ -24,9 +24,10 @@ class Driver {
    * Takes in the file paths of the training labels and images, calls the
    * methods in Model class to train the model, and saves the model to a file
    *
-   * @param labels_path
-   * @param images_path
-   * @param saved_path
+   * @param labels_path The file path of the labels
+   * @param images_path The file path of the images
+   * @param saved_path The file path to save the model
+   * @param test Validate the model or not
    */
   void TrainModel(const std::string& labels_path,
                   const std::string& images_path, const std::string& saved_path,
@@ -35,6 +36,7 @@ class Driver {
   /**
    * Loads in a trained model
    * @param saved_path The file path of the model
+   * @param validate_model Validate the model or not
    */
   void LoadModel(const std::string& saved_path, bool validate_model);
 
@@ -60,7 +62,7 @@ class Driver {
    * @param prior_probabilities The vector of class probabilities
    * @param feature_probabilities The 3D vector of feature probabilities
    */
-  void WriteToFile(const std::string& saved_path,
+  void SaveModel(const std::string& saved_path,
                    const std::map<size_t, double>& prior_probabilities,
                    const std::map<size_t, FeatureData>& feature_probabilities);
 

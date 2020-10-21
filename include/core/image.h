@@ -13,11 +13,11 @@ class Image {
   /**
    * Overloads the >> operator to read the whole image
    *
-   * @param input The input stream
+   * @param istream The input stream
    * @param image The Image object
    * @return The input stream
    */
-  friend std::istream& operator>>(std::istream& input, Image& image);
+  friend std::istream& operator>>(std::istream& istream, Image& image);
 
   /**
    * @return The 2D vector of Pixels
