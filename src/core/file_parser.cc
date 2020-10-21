@@ -1,37 +1,37 @@
 #include <core/file_parser.h>
 
 void FileParser::GetLabelsFromFile(const std::string &labels_path) {
-  std::ifstream file_reader(labels_path);
+  std::ifstream input_stream(labels_path);
   std::string line;
 
-  while (std::getline(file_reader, line)) {
+  while (std::getline(input_stream, line)) {
     training_labels_.push_back(std::stoi(line));  // convert to int
   }
 
-  file_reader.close();
+  input_stream.close();
 }
 
 void FileParser::GetImagesFromFile(const std::string &images_path) {
-  std::ifstream file_reader(images_path);
+  std::ifstream input_stream(images_path);
 
   // Read length of first line and get the size of the image
   std::string line;
-  std::getline(file_reader, line);
+  std::getline(input_stream, line);
   image_size_ = line.length();
 
   // Close and reopen file to start from the top
-  file_reader.close();
-  file_reader.clear();
-  file_reader.open(images_path);
+  input_stream.close();
+  input_stream.clear();
+  input_stream.open(images_path);
 
   size_t i = 0;
   while (i++ < training_labels_.size()) {
     Image image;
-    file_reader >> image;
+    input_stream >> image;
     training_images_.push_back(image);
   }
 
-  file_reader.close();
+  input_stream.close();
 }
 
 std::map<size_t, std::vector<Image>> FileParser::GetLabelImagePairs(
