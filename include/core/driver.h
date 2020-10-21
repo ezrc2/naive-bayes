@@ -35,6 +35,7 @@ class Driver {
 
   /**
    * Loads in a trained model
+   *
    * @param saved_path The file path of the model
    * @param validate_model Validate the model or not
    */

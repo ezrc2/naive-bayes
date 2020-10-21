@@ -1,6 +1,6 @@
-#include "core/file_parser.h"
+#include <core/file_parser.h>
 
-void FileParser::GetLabelsFromFile(const std::string& labels_path) {
+void FileParser::GetLabelsFromFile(const std::string &labels_path) {
   std::ifstream file_reader(labels_path);
   std::string line;
 
@@ -11,7 +11,7 @@ void FileParser::GetLabelsFromFile(const std::string& labels_path) {
   file_reader.close();
 }
 
-void FileParser::GetImagesFromFile(const std::string& images_path) {
+void FileParser::GetImagesFromFile(const std::string &images_path) {
   std::ifstream file_reader(images_path);
 
   // Read length of first line and get the size of the image
@@ -35,7 +35,7 @@ void FileParser::GetImagesFromFile(const std::string& images_path) {
 }
 
 std::map<size_t, std::vector<Image>> FileParser::GetLabelImagePairs(
-    const std::string& labels_path, const std::string& images_path) {
+    const std::string &labels_path, const std::string &images_path) {
   GetLabelsFromFile(labels_path);
   GetImagesFromFile(images_path);
 

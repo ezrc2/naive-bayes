@@ -20,7 +20,7 @@ class FileParser {
    * @return
    */
   std::map<size_t, std::vector<Image>> GetLabelImagePairs(
-      const std::string& labels_path, const std::string& images_path);
+      const std::string &labels_path, const std::string &images_path);
 
   /**
    * @return The image size
@@ -31,11 +31,11 @@ class FileParser {
   /**
    * Reads in the training labels and stores them in a vector
    */
-  void GetLabelsFromFile(const std::string& labels_path);
+  void GetLabelsFromFile(const std::string &labels_path);
   /**
    * Reads in the training images and stores them in a vector
    */
-  void GetImagesFromFile(const std::string& images_path);
+  void GetImagesFromFile(const std::string &images_path);
 
   size_t image_size_;
   std::vector<size_t> training_labels_;

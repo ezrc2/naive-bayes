@@ -44,7 +44,6 @@ class Model {
   std::map<size_t, std::vector<Image>> training_data_;
   std::map<size_t, size_t> images_per_class_;
   std::map<size_t, double> prior_probabilities_;
-  //std::map<size_t, std::vector<std::vector<double>>> feature_probabilities_;
   std::map<size_t, FeatureData> feature_probabilities_;
 
   size_t sum_images_;
