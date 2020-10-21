@@ -45,22 +45,28 @@ endif()
 
 get_filename_component(CINDER_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../" ABSOLUTE)
 get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
-
+message(${CINDER_PATH})
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
-list(APPEND CORE_SOURCE_FILES src/core/naive_bayes_main.cc)
+list(APPEND CORE_SOURCE_FILES src/core/driver.cc)
 list(APPEND CORE_SOURCE_FILES src/core/model.cc)
 list(APPEND CORE_SOURCE_FILES include/core/model.h)
-list(APPEND CORE_SOURCE_FILES src/core/read_data.cc)
-list(APPEND CORE_SOURCE_FILES include/core/read_data.h)
+list(APPEND CORE_SOURCE_FILES src/core/file_parser.cc)
+list(APPEND CORE_SOURCE_FILES include/core/file_parser.h)
 list(APPEND CORE_SOURCE_FILES src/core/image.cc)
 list(APPEND CORE_SOURCE_FILES include/core/image.h)
+list(APPEND CORE_SOURCE_FILES src/core/classifier.cc)
+list(APPEND CORE_SOURCE_FILES include/core/classifier.h)
+list(APPEND CORE_SOURCE_FILES src/core/feature_data.cc)
+list(APPEND CORE_SOURCE_FILES include/core/feature_data.h)
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
                             src/visualizer/naive_bayes_app.cc
                             src/visualizer/sketchpad.cc)
 
-list(APPEND TEST_FILES tests/naive_bayes_test.cc)
+list(APPEND TEST_FILES tests/model_test.cc)
+list(APPEND TEST_FILES tests/classifier_test.cc)
+list(APPEND TEST_FILES tests/file_test.cc)
 
 add_executable(train-model apps/train_model_main.cc ${CORE_SOURCE_FILES})
 target_include_directories(train-model PRIVATE include)
