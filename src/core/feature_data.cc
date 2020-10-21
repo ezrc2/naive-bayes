@@ -10,7 +10,6 @@ std::istream& operator>>(std::istream& istream, FeatureData& data) {
   std::string line;
   std::getline(istream, line);
   while (!line.empty()) {
-    std::cout << line << std::endl;
     std::vector<std::string> tokens;
 
     std::stringstream stream(line);
@@ -23,9 +22,7 @@ std::istream& operator>>(std::istream& istream, FeatureData& data) {
     row.reserve(tokens.size());
     for (const std::string& token : tokens) {
       row.push_back(std::stod(token));
-      std::cout << token << " ";
     }
-    std::cout << std::endl;
 
     data.features_.push_back(row);
     std::getline(istream, line);
