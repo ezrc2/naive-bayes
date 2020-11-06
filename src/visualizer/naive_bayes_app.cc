@@ -7,7 +7,8 @@ namespace visualizer {
 NaiveBayesApp::NaiveBayesApp()
     : sketchpad_(glm::vec2(kMargin, kMargin), kImageDimension,
                  kWindowSize - 2 * kMargin) {
-  ci::app::setWindowSize((int) kWindowSize, (int) kWindowSize);
+  ci::app::setWindowSize(static_cast<int>(kWindowSize),
+                         static_cast<int>(kWindowSize));
 }
 
 void NaiveBayesApp::draw() {
@@ -34,10 +35,13 @@ void NaiveBayesApp::mouseDrag(ci::app::MouseEvent event) {
 }
 
 void NaiveBayesApp::keyDown(ci::app::KeyEvent event) {
+  Driver driver;
+  driver.LoadModel(kSavedPath, false);
   switch (event.getCode()) {
     case ci::app::KeyEvent::KEY_RETURN:
       // ask your classifier to classify the image that's currently drawn on the
       // sketchpad and update current_prediction_
+      current_prediction_ = driver.ClassifySingleImage(sketchpad_.GetPixels());
       break;
 
     case ci::app::KeyEvent::KEY_DELETE:

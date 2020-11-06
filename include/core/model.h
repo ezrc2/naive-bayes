@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "image.h"
+#include "feature_data.h"
 
 /**
  * Calculates the class and feature probabilities given the training labels and
@@ -12,16 +13,17 @@
 class Model {
  public:
   /**
-   * Initializes class probability and feature probability vectors with zeroes
-   * @param pairs The multimap with label-image pairs
+   * Initializes prior probability and feature probability maps with zeroes
+   * @param pairs The training data map with label-vector<image> pairs
    * @param image_size The size of each image
    */
-  Model(const std::multimap<size_t, Image> &pairs, size_t image_size);
+  Model(const std::map<size_t, std::vector<Image>>& training_data,
+        size_t image_size);
 
   /**
-   * Calculates the class probabilities
+   * Calculates the prior probabilities
    */
-  void CalculateClassProbabilities();
+  void CalculatePriorProbabilities();
 
   /**
    * Calculates the probability of each coordinate being shaded
@@ -29,30 +31,23 @@ class Model {
   void CalculateFeatureProbabilities();
 
   /**
-   * @return The vector of class probabilities
+   * @return The map of prior probabilities
    */
-  std::vector<double> GetClassProbabilities();
+  std::map<size_t, double> GetPriorProbabilities();
 
   /**
-   * @return The vector containing feature probabilities for each class
+   * @return The map containing feature probabilities for each class
    */
-  std::vector<std::vector<std::vector<double>>> GetFeatureProbabilities();
+  std::map<size_t, FeatureData> GetFeatureProbabilities();
 
  private:
-  /**
-   * Applies laplace smoothing to the feature probabilities
-   */
-  void ApplyLaplaceSmoothing();
+  std::map<size_t, std::vector<Image>> training_data_;
+  std::map<size_t, size_t> images_per_class_;
+  std::map<size_t, double> prior_probabilities_;
+  std::map<size_t, FeatureData> feature_probabilities_;
 
-  std::multimap<size_t, Image> pairs_;
-  std::vector<size_t> images_per_class_;
-  std::vector<double> class_probabilities_;
-  // shaded pixels
-  std::vector<std::vector<std::vector<double>>>feature_probabilities_;
-
-  size_t image_size_;
   size_t sum_images_;
-  const size_t kLapLaceSmoothing = 1;
+  const double kLapLaceSmoothing = 1;
   const size_t kNumberOfClasses = 10;
   const char kGreyPixel = '+';
   const char kBlackPixel = '#';

@@ -49,7 +49,15 @@ class Sketchpad {
    */
   void Clear();
 
+  /**
+   * @return The 2D char vector of pixels
+   */
+  std::vector<std::vector<char>> GetPixels();
+
  private:
+
+  std::vector<std::vector<char>> pixels_;
+
   glm::vec2 top_left_corner_;
 
   size_t num_pixels_per_side_;
@@ -58,6 +66,11 @@ class Sketchpad {
   double pixel_side_length_;
 
   double brush_radius_;
+
+  const char kUnshadedPixel = ' ';
+  const char kShadedPixel = '#';
+
+
 };
 
 }  // namespace visualizer

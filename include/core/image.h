@@ -9,26 +9,21 @@
  * operator
  */
 class Image {
-
-  std::vector<std::string> pixels_;
-  size_t image_size_;
-
  public:
-
   /**
    * Overloads the >> operator to read the whole image
    *
-   * @param input The input stream
+   * @param istream The input stream
    * @param image The Image object
    * @return The input stream
    */
-  friend std::istream &operator>>(std::istream &input, Image &image);
-
-  void SetImageSize(size_t size);
+  friend std::istream& operator>>(std::istream& istream, Image& image);
 
   /**
    * @return The 2D vector of Pixels
    */
-  std::vector<std::string> GetPixels();
+  std::vector<std::vector<char>> GetPixels();
 
+ private:
+  std::vector<std::vector<char>> pixels_;
 };
